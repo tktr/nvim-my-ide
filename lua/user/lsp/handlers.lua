@@ -68,6 +68,7 @@ local function lsp_keymaps(bufnr)
 	keymap(bufnr, "n", "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
 	keymap(bufnr, "n", "<leader>ls", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 	keymap(bufnr, "n", "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
+  keymap(bufnr, 'n', '<leader>lf', "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", opts)
 end
 
 M.on_attach = function(client, bufnr)
@@ -75,9 +76,13 @@ M.on_attach = function(client, bufnr)
 		client.server_capabilities.documentFormattingProvider = false
 	end
 
-	if client.name == "sumneko_lua" then
-		client.server_capabilities.documentFormattingProvider = false
+	if client.name == "ruff_lsp" then
+    -- Disable hover in favor of Pyright
+    client.server_capabilities.hover = false
 	end
+--	if client.name == "sumneko_lua" then
+--		client.server_capabilities.documentFormattingProvider = false
+--	end
 
 	lsp_keymaps(bufnr)
 	local status_ok, illuminate = pcall(require, "illuminate")
