@@ -1,7 +1,6 @@
 return {
   settings = {
-    fixAll = true
-    logLevel = 'debug'
+      fixAll = true,
+      logLevel = 'info'
     },
 }
-

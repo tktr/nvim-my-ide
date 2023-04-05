@@ -1,8 +1,10 @@
 return {
   settings = {
     python = {
+      venvPath = ".",
       analysis = {
-        typeCheckingMode = "off",
+        typeCheckingMode = "strict",
+        diagnosticMode = "workspace",
       },
     },
   },
