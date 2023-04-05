@@ -138,7 +138,7 @@ local mappings = {
     s = "Signature Help",
     q = "Set Loc List",
     f = "Format",
-    F = "Ruff Format",
+    F = "Fix All",
   },
   s = {
     name = "Search",

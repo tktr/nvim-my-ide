@@ -16,8 +16,15 @@ null_ls.setup {
       extra_filetypes = { "toml" },
       extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
     },
+    -- ruff should be called before black i.e. for cleanup of blank lines
+    -- after removing unused imports.
+    -- Note that ruff-lsp is also registered. Still required here
+    -- for synchronous autocommands on save (curently not possible with LSP)
+    formatting.ruff,
     formatting.black.with { extra_args = { "--fast" } },
     formatting.stylua,
-    formatting.google_java_format
+    formatting.google_java_format,
+    --formatting.trim_newlines,
+    --formatting.trim_whitespace
   },
 }
