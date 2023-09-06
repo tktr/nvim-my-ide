@@ -1,4 +1,4 @@
-vim.opt.backup = false                          -- creates a backup fileop
+vim.opt.backup = false                          -- creates a backup file
 vim.opt.relativenumber = true                   -- relative line numbers
 vim.opt.cmdheight = 1                           -- more space in the neovim command line for displaying messages
 vim.opt.completeopt = { "menuone", "noselect" } -- mostly just for cmp
