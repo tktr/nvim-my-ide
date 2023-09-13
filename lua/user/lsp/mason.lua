@@ -1,4 +1,5 @@
 -- See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+-- These servers must be installed with Mason (run ':Mason')
 local servers = {
 	"lua_ls",
   "ruff_lsp",
@@ -9,7 +10,11 @@ local servers = {
 	"bashls",
 	"jsonls",
 	"yamlls",
-  "ansiblels"
+  "ansiblels",
+  -- markdown
+  "marksman",
+  -- Sphinx RST
+  "esbonio"
 }
 
 local settings = {
