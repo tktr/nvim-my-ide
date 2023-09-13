@@ -1,3 +1,4 @@
+-- See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 local servers = {
 	--"sumneko_lua",
   "ruff_lsp",
@@ -8,6 +9,7 @@ local servers = {
 	"bashls",
 	"jsonls",
 	"yamlls",
+  "ansiblels"
 }
 
 local settings = {
@@ -45,7 +47,7 @@ for _, server in pairs(servers) do
 	server = vim.split(server, "@")[1]
 
 	local require_ok, conf_opts = pcall(require, "user.lsp.settings." .. server)
-  --vim.notify(vim.inspect(conf_opts))
+  -- vim.notify(vim.inspect(conf_opts))
 	if require_ok then
 		opts = vim.tbl_deep_extend("force", conf_opts, opts)
 	end
