@@ -1,6 +1,6 @@
 -- See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 local servers = {
-	--"sumneko_lua",
+	"lua_ls",
   "ruff_lsp",
 	"pyright",
 	"cssls",
