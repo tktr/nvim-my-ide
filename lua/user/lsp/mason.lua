@@ -14,7 +14,9 @@ local servers = {
   -- markdown
   "marksman",
   -- Sphinx RST
-  "esbonio"
+  "esbonio",
+  -- Nix language server
+  "rnix"
 }
 
 local settings = {

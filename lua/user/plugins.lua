@@ -111,6 +111,8 @@ return packer.startup(function(use)
 
   use { "ThePrimeagen/vim-be-good" }
   use { "tktr/nvim-ansible" }
+  -- AI
+  use { "codota/tabnine-nvim", build = "./dl_binaries.sh"} -- binaries are not downloaded for some reason
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
