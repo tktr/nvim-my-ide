@@ -1,3 +1,5 @@
+local opts = { noremap = true, silent = true }
+
 local function copy(lines, _)
   require('osc52').copy(table.concat(lines, '\n'))
 end
@@ -16,3 +18,6 @@ vim.g.clipboard = {
 vim.keymap.set('n', '<leader>Y', '"+y')
 vim.keymap.set('n', '<leader>YY', '"+yy')
 vim.keymap.set('v', '<leader>Y', '"+y')
+
+vim.keymap("n", "<C-d>", "<C-d>zz", opts)
+vim.keymap("n", "<C-u>", "<C-u>zz", opts)
