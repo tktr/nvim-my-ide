@@ -90,3 +90,10 @@ keymap("n", "<leader>dt", "<cmd>lua require'dap'.terminate()<cr>", opts)
 keymap('n', '<leader>Y', '"+y', opts)
 keymap('n', '<leader>YY', '"+yy', opts)
 keymap('v', '<leader>Y', '"+y', opts)
+
+-- Copilot
+keymap('i', '<C-x>', 'copilot#Accept("\\<CR>")', {
+  expr = true,
+  replace_keycodes = false
+})
+vim.g.copilot_no_tab_map = true
