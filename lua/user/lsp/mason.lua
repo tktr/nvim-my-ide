@@ -2,7 +2,7 @@
 -- These servers must be installed with Mason (run ':Mason')
 local servers = {
 	"lua_ls",
-  "ruff_lsp",
+  "ruff",
 	"pyright",
 	"cssls",
 	"html",
