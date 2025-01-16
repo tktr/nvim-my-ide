@@ -87,6 +87,7 @@ local mappings = {
   ["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
   ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
   ["Y"] = "Yank Clipboard",
+  ["P"] = "Paste Clipboard",
 
   p = {
     name = "Packer",
