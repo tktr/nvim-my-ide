@@ -16,7 +16,9 @@ local servers = {
   -- Sphinx RST
   "esbonio",
   -- Nix language server
-  "rnix"
+  "rnix",
+  -- PHP languasge server
+  "intelephense"
 }
 
 local settings = {
