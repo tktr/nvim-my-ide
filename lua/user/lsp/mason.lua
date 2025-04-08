@@ -1,12 +1,22 @@
+-- See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+-- These servers must be installed with Mason (run ':Mason')
 local servers = {
-	"sumneko_lua",
+	"lua_ls",
+  "ruff_lsp",
+	"pyright",
 	"cssls",
 	"html",
-	"tsserver",
-	"pyright",
+	"ts_ls",
 	"bashls",
 	"jsonls",
 	"yamlls",
+  "ansiblels",
+  -- markdown
+  "marksman",
+  -- Sphinx RST
+  "esbonio",
+  -- Nix language server
+  "rnix"
 }
 
 local settings = {
@@ -44,6 +54,7 @@ for _, server in pairs(servers) do
 	server = vim.split(server, "@")[1]
 
 	local require_ok, conf_opts = pcall(require, "user.lsp.settings." .. server)
+  -- vim.notify(vim.inspect(conf_opts))
 	if require_ok then
 		opts = vim.tbl_deep_extend("force", conf_opts, opts)
 	end
