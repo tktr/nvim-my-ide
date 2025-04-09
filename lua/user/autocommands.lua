@@ -41,6 +41,13 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   pattern = { "*.py" },
   callback = function()
       vim.lsp.buf.format({ async = false })
+      vim.lsp.buf.code_action({
+        apply = true,
+        context = {
+          only = { "source.organizeImports" },
+          diagnostics = {},
+        },
+      })
   end
 })
 
