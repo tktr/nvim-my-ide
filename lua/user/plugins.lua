@@ -35,7 +35,6 @@ return require("lazy").setup({
   -- Autopairs, integrates with both cmp and treesitter
   { "windwp/nvim-autopairs"},
   { "numToStr/Comment.nvim"},
-  { "JoosepAlviste/nvim-ts-context-commentstring"},
 
   -- Icons
   { "kyazdani42/nvim-web-devicons", lazy = false }, -- Often needed early for UI elements
