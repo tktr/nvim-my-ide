@@ -1,4 +1,3 @@
-
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -23,7 +22,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- Main Lazy.nvim setup call
-return require("lazy").setup({
+return require("lazy").setup {
   {
     "vhyrro/luarocks.nvim",
     priority = 1000, -- Very high priority is required, luarocks.nvim should run as the first plugin in your config.
@@ -33,8 +32,8 @@ return require("lazy").setup({
   { "nvim-lua/plenary.nvim", lazy = false },
 
   -- Autopairs, integrates with both cmp and treesitter
-  { "windwp/nvim-autopairs"},
-  { "numToStr/Comment.nvim"},
+  { "windwp/nvim-autopairs" },
+  { "numToStr/Comment.nvim" },
 
   -- Icons
   { "kyazdani42/nvim-web-devicons", lazy = false }, -- Often needed early for UI elements
@@ -47,7 +46,7 @@ return require("lazy").setup({
 
   -- UI/Navigation
   { "akinsho/bufferline.nvim" },
-  { "moll/vim-bbye"},
+  { "moll/vim-bbye" },
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
@@ -56,8 +55,8 @@ return require("lazy").setup({
     "akinsho/toggleterm.nvim",
     cmd = "ToggleTerm",
   },
-  { "ahmedkhalf/project.nvim"},
-  { "lewis6991/impatient.nvim"}, -- Needs to load early for performance
+  { "ahmedkhalf/project.nvim" },
+  { "lewis6991/impatient.nvim" }, -- Needs to load early for performance
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
@@ -70,8 +69,8 @@ return require("lazy").setup({
   { "folke/which-key.nvim", tag = "v2.1.0", event = "VeryLazy" }, -- Often configured to load on specific key presses
 
   -- Colorschemes
-  { "folke/tokyonight.nvim"},
-  { "lunarvim/darkplus.nvim"},
+  { "folke/tokyonight.nvim" },
+  { "lunarvim/darkplus.nvim" },
   -- { "rmehri01/onenord.nvim" },
 
   -- cmp plugins (often loaded on Insermter or when LSP attaches)
@@ -163,117 +162,188 @@ return require("lazy").setup({
     },
   },
   {
-    "yetone/avante.nvim",
-    -- mode = "legacy",
-    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    build = "make", -- ⚠️ must add this line! ! !
-    -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-    event = "VeryLazy",
-    version = "v0.0.25", -- Never set this value to "*"! Never!
-    ---@module 'avante'
-    ---@type avante.Config
+    "aweis89/ai-terminals.nvim",
+    dependencies = { "folke/snacks.nvim" },
     opts = {
-      -- debug = true,
-      behavior = {
-        enable_token_counting = false,
-        auto_suggestions = false, -- disable auto suggestions
+      terminals = {
+        goose = {
+          cmd = function()
+            return string.format("GOOSE_CLI_THEME=%s goose", vim.o.background)
+          end,
+          path_header_template = "@%s", -- Default: @ prefix
+        },
+        aichat = {
+          cmd = function()
+            return string.format(
+              "AICHAT_LIGHT_THEME=%s aichat -r %%functions%% --session",
+              -- Convert boolean to string "true" or "false"
+              tostring(vim.o.background == "light")
+            )
+          end,
+          path_header_template = "@file %s", -- Default: @ prefix
+        },
+        claude = {
+          cmd = function()
+            return string.format("claude config set -g theme %s && claude", vim.o.background)
+          end,
+          path_header_template = "@%s", -- Default: @ prefix
+        },
+        aider = {
+          cmd = function()
+            return string.format("aider --watch-files --%s-mode", vim.o.background)
+          end,
+          path_header_template = "`%s`", -- Special: backticks for Aider
+        },
       },
-      -- add any opts here
-      -- for example
-      provider = "copilot",
-      -- provider = "gemini",
-      providers = {
-        -- copilot = {
-        --   -- disable_tools = true,
-        --   endpoint = "https://api.githubcopilot.com",
-        --   insecure = true,
-        --   proxy = "http://xpxiap.inprod.ept.lu:8080",
-        --   model = "gpt-4o",
-        --   -- model = "gpt-4.1",
-        -- },
-        -- gemini = {
-        --   -- disable_tools = true,
-        --   insecure = true,
-        --   proxy = "http://xpxiap.inprod.ept.lu:8080",
-        --   -- model = "gpt-4.1",
-        -- },
-      },
+      -- You can also set window, default_position, enable_diffing here
     },
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      --- The below dependencies are optional,
-      "echasnovski/mini.pick", -- for file_selector provider mini.pick
-      "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-      "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-      "ibhagwan/fzf-lua", -- for file_selector provider fzf
-      "stevearc/dressing.nvim", -- for input provider dressing
-      "folke/snacks.nvim", -- for input provider snacks
-      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-      "zbirenbaum/copilot.lua", -- for providers='copilot'
+    keys = {
+      -- Diff Tools
       {
-        -- support for image pasting
-        "HakonHarnes/img-clip.nvim",
-        event = "VeryLazy",
-        opts = {
-          -- recommended settings
-          default = {
-            embed_image_as_base64 = false,
-            prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
-            },
-            -- required for Windows users
-            use_absolute_path = true,
-          },
-        },
+        "<leader>dvo",
+        function()
+          require("ai-terminals").diff_changes()
+        end,
+        desc = "Show diff (vimdiff)",
       },
       {
-        -- Make sure to set this up properly if you have lazy=true
-        "MeanderingProgrammer/render-markdown.nvim",
-        opts = {
-          file_types = { "markdown", "Avante" },
-        },
-        ft = { "markdown", "Avante" },
+        "<leader>dvD",
+        function()
+          require("ai-terminals").diff_changes { delta = true }
+        end,
+        desc = "Show diff (delta)",
+      },
+      {
+        "<leader>dvr",
+        function()
+          require("ai-terminals").revert_changes()
+        end,
+        desc = "Revert changes from backup",
+      },
+      -- Example Keymaps (using default terminal names: 'claude', 'goose',
+      -- 'aider', 'aichat')
+      -- Generic File Management (works with any terminal)
+      {
+        "<leader>af", -- Mnemonic: Add Files
+        function()
+          -- Add current file to Claude using generic function
+          require("ai-terminals").add_files_to_terminal("aichat", { vim.fn.expand "%" })
+        end,
+        desc = "Add current file to Claude",
+      },
+      {
+        "<leader>aF", -- Mnemonic: Add Files (all buffers)
+        function()
+          -- Add all buffers to Claude using generic function
+          require("ai-terminals").add_buffers_to_terminal "aichat"
+        end,
+        desc = "Add all buffers to Claude",
+      },
+      -- aichat Keymaps
+      {
+        "<leader>ati",
+        function()
+          require("ai-terminals").toggle "aichat"
+        end,
+        mode = { "n", "v" },
+        desc = "Toggle AI Chat terminal (sends selection in visual mode)",
+      },
+      {
+        "<leader>adi",
+        function()
+          require("ai-terminals").send_diagnostics "aichat"
+        end,
+        mode = { "n", "v" },
+        desc = "Send diagnostics to AI Chat",
+      },
+      -- Run Command and Send Output
+      {
+        "<leader>ar", -- Mnemonic: AI Run command (prompts)
+        function()
+          -- Prompts user for a command, then sends its output to the active/last-focused AI terminal.
+          require("ai-terminals").send_command_output()
+        end,
+        desc = "Run command (prompts) and send output to active AI terminal",
+      },
+      {
+        "<leader>aj", -- Mnemonic: AI Jira (example fixed command)
+        function()
+          -- Sends output of a fixed command to the active/last-focused AI terminal.
+          -- Replace with your actual command, e.g., dynamically get ticket ID.
+          require("ai-terminals").send_command_output "jira issue view YOUR-TICKET-ID --plain"
+        end,
+        desc = "Send Jira ticket (example) to active AI terminal",
+      },
+      -- Destroy All Terminals
+      {
+        "<leader>ax", -- Mnemonic: AI eXterminate
+        function()
+          require("ai-terminals").destroy_all()
+        end,
+        desc = "Destroy all AI terminals (closes windows, stops processes)",
+      },
+      -- Focus Terminal
+      {
+        "<leader>af", -- Mnemonic: AI Focus
+        function()
+          require("ai-terminals").focus()
+        end,
+        desc = "Focus the last used AI terminal window",
       },
     },
   },
-}, {
-  -- Optional: Global settings for Lazy.nvim
-  -- performance = {
-  --   rtp = {
-  --     -- disable some rtp plugins
-  --     disabled_plugins = {
-  --       "netrw",
-  --       "netrwPlugin",
-  --       "netrwSettings",
-  --       "netrwFileHandlers",
-  --       "gzip",
-  --       "zipPlugin",
-  --       "tarPlugin",
-  --       "getscript",
-  --       "getscriptPlugin",
-  --       "vimball",
-  --       "vimballPlugin",
-  --       "matchit",
-  --       "tutor",
-  --       "rplugin",
-  --       "rrhelper",
-  --       "syntax",
-  --       "synmenu",
-  --       "menu",
-  --       "ins_expand",
-  --       "health",
-  --       "tohtml",
-  --       "fixindir",
-  --       "2html",
-  --       "logiPat",
-  --       "nvim",
-  --     },
-  --   },
-  -- },
-})
+  {
+    "NickvanDyke/opencode.nvim",
+    dependencies = {
+      -- Recommended for better prompt input, and required to use `opencode.nvim`'s embedded terminal — otherwise optional
+      { "folke/snacks.nvim", opts = { input = { enabled = true } } },
+    },
+    config = function()
+      vim.g.opencode_opts = {
+        port = 32443, -- Port for the opencode server
+        auto_reload = true, -- Auto-reload files when changed externally
+        -- Your configuration, if any — see `lua/opencode/config.lua`
+      }
+
+      -- Required for `opts.auto_reload`
+      vim.opt.autoread = true
+
+      -- Recommended keymaps
+      vim.keymap.set("n", "<leader>ot", function()
+        require("opencode").toggle()
+      end, { desc = "Toggle opencode" })
+      vim.keymap.set("n", "<leader>oA", function()
+        require("opencode").ask()
+      end, { desc = "Ask opencode" })
+      vim.keymap.set("n", "<leader>oa", function()
+        require("opencode").ask "@cursor: "
+      end, { desc = "Ask opencode about this" })
+      vim.keymap.set("v", "<leader>oa", function()
+        require("opencode").ask "@selection: "
+      end, { desc = "Ask opencode about selection" })
+      vim.keymap.set("n", "<leader>on", function()
+        require("opencode").command "session_new"
+      end, { desc = "New opencode session" })
+      vim.keymap.set("n", "<leader>oy", function()
+        require("opencode").command "messages_copy"
+      end, { desc = "Copy last opencode response" })
+      vim.keymap.set("n", "<S-C-u>", function()
+        require("opencode").command "messages_half_page_up"
+      end, { desc = "Messages half page up" })
+      vim.keymap.set("n", "<S-C-d>", function()
+        require("opencode").command "messages_half_page_down"
+      end, { desc = "Messages half page down" })
+      vim.keymap.set({ "n", "v" }, "<leader>os", function()
+        require("opencode").select()
+      end, { desc = "Select opencode prompt" })
+
+      -- Example: keymap for custom prompt
+      vim.keymap.set("n", "<leader>oe", function()
+        require("opencode").prompt "Explain @cursor and its context"
+      end, { desc = "Explain this code" })
+    end,
+  },
+}
 
 -- You no longer need the PACKER_BOOTSTRAP check.
 -- Lazy.nvim handles its own syncing automatically on first run.

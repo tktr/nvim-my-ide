@@ -162,6 +162,23 @@ local mappings = {
     h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
     v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
   },
+
+  o = {
+    name = "opencode",
+    t = "Toggle",
+    A = "Ask",
+    a = "Ask about this",
+    n = "New session",
+    y = "Copy last response",
+    s = "Select prompt",
+    e = "Explain this code"
+    --  vim.keymap.set("n", "<S-C-u>", function()
+    --    require("opencode").command "messages_half_page_up"
+    --  end, { desc = "Messages half page up" })
+    --  vim.keymap.set("n", "<S-C-d>", function()
+    --    require("opencode").command "messages_half_page_down"
+    --  end, { desc = "Messages half page down" })
+  }
 }
 
 which_key.setup(setup)
