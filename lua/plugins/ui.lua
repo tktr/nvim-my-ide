@@ -184,16 +184,19 @@ return {
       }
 
       local mappings = {
-        ["e"] = { "<cmd>NeotreeToggle<cr>", "Explorer" },
+        ["e"] = { "<cmd>Neotree toggle<cr>", "Explorer" },
         ["w"] = { "<cmd>w!<CR>", "Save" },
         ["q"] = { "<cmd>q!<CR>", "Quit" },
         ["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
-        ["h"] = { "<cmd>nohl<CR>", "No Highlight" },
+        ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
 
         f = {
           name = "Find",
           f = { "<cmd>Telescope find_files<cr>", "Find File" },
           c = { "<cmd>Telescope git_files<cr>", "Find Git File" },
+          t = { "<cmd>Telescope live_grep<cr>", "Find Text" },
+          p = { "<cmd>Telescope projects<cr>", "Find Projects" },
+          b = { "<cmd>Telescope buffers<cr>", "Find Buffers" },
         },
 
         g = {
@@ -237,6 +240,9 @@ return {
           name = "Search",
           g = { "<cmd>Telescope live_grep<cr>", "Grep" },
           b = { "<cmd>Telescope grep_string<cr>", "Grep Buffer" },
+          z = { "<cmd>Telescope zoxide list<cr>", "Zoxide" },
+          l = { "<cmd>Leap forward<cr>", "Leap Forward" },
+          L = { "<cmd>Leap backward<cr>", "Leap Backward" },
         },
         t = {
           name = "Terminal",
@@ -248,6 +254,23 @@ return {
           h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
           v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
         },
+        d = {
+          name = "DAP",
+          b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
+          c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
+          i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
+          o = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
+          O = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
+          r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Toggle Repl" },
+          l = { "<cmd>lua require'dap'.run_last()<cr>", "Run Last" },
+          u = { "<cmd>lua require'dapui'.toggle()<cr>", "Toggle UI" },
+          t = { "<cmd>lua require'dap'.terminate()<cr>", "Terminate" },
+        },
+        ["/"] = { "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>", "Comment" },
+        ["."] = { "f ", "Jump to whitespace" },
+        [","] = { "F ", "Jump to whitespace" },
+        ["Y"] = { '"+y', "Yank to clipboard" },
+        ["YY"] = { '"+yy', "Yank line to clipboard" },
       }
       which_key.setup(setup)
       which_key.register(mappings, opts)

@@ -1,6 +1,9 @@
 return {
   "nvim-telescope/telescope.nvim",
   cmd = "Telescope",
+  dependencies = {
+    { "nvim-telescope/telescope-zoxide" },
+  },
   config = function()
     local telescope = require("telescope")
     local actions = require("telescope.actions")
@@ -23,5 +26,7 @@ return {
         },
       },
     })
+
+    require("telescope").load_extension("zoxide")
   end,
 }
