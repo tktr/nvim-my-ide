@@ -6,7 +6,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out, "WarningMsg" },
+      { out,                            "WarningMsg" },
       { "\nPress any key to exit..." },
     }, true, {})
     vim.fn.getchar()
@@ -29,7 +29,7 @@ return require("lazy").setup {
     config = true,
   },
   -- Useful lua functions used by lots of plugins (often needed early)
-  { "nvim-lua/plenary.nvim", lazy = false },
+  { "nvim-lua/plenary.nvim",        lazy = false },
 
   -- Autopairs, integrates with both cmp and treesitter
   { "windwp/nvim-autopairs" },
@@ -65,8 +65,8 @@ return require("lazy").setup {
     opts = {},
     event = "BufReadPost",
   },
-  { "goolord/alpha-nvim", event = "VimEnter" }, -- Loads on Neovim startup
-  { "folke/which-key.nvim", tag = "v2.1.0", event = "VeryLazy" }, -- Often configured to load on specific key presses
+  { "goolord/alpha-nvim",    event = "VimEnter" },                -- Loads on Neovim startup
+  { "folke/which-key.nvim",  tag = "v2.1.0",    event = "VeryLazy" }, -- Often configured to load on specific key presses
 
   -- Colorschemes
   { "folke/tokyonight.nvim" },
@@ -102,8 +102,8 @@ return require("lazy").setup {
     -- Load LSP when a buffer is read
     event = "BufReadPre",
   },
-  { "RRethy/vim-illuminate", event = "BufReadPost" },
-  { "nvimtools/none-ls.nvim", event = "BufReadPre" },
+  { "RRethy/vim-illuminate",         event = "BufReadPost" },
+  { "nvimtools/none-ls.nvim",        event = "BufReadPre" },
 
   -- Telescope
   { "nvim-telescope/telescope.nvim", cmd = "Telescope" },
@@ -112,7 +112,7 @@ return require("lazy").setup {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate", -- Run this command after install/update
-    event = "VeryLazy", -- Load treesitter when Neovim is nearly done starting up
+    event = "VeryLazy",  -- Load treesitter when Neovim is nearly done starting up
   },
   {
     "nvim-treesitter/nvim-treesitter-context",
@@ -138,8 +138,24 @@ return require("lazy").setup {
     cmd = "DAPInstall",
   },
 
-  { "ThePrimeagen/vim-be-good" }, -- No explicit lazy loading, will load on first use
-  { "tktr/nvim-ansible", ft = { "yaml", "ansible" } }, -- Load only for Ansible-related files
+  { "ThePrimeagen/vim-be-good" },                      -- No explicit lazy loading, will load on first use
+  { "tktr/nvim-ansible",       ft = { "yaml", "ansible" } }, -- Load only for Ansible-related files
+  {
+    "folke/snacks.nvim",
+
+    ---@type snacks.Config
+    opts = {
+      input = {
+        enabled = true, -- Enable the input UI
+        border = "rounded", -- Border style for the input window
+      },
+      picker = {
+        -- your picker configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    }
+  },
 
   -- AI
   --{ "codota/tabnine-nvim", build = "./dl_binaries.sh" }, -- Use 'build' for post-clone commands
@@ -163,7 +179,6 @@ return require("lazy").setup {
   },
   {
     "aweis89/ai-terminals.nvim",
-    dependencies = { "folke/snacks.nvim" },
     opts = {
       terminals = {
         goose = {
@@ -300,7 +315,7 @@ return require("lazy").setup {
     },
     config = function()
       vim.g.opencode_opts = {
-        port = 32443, -- Port for the opencode server
+        port = 32443,       -- Port for the opencode server
         auto_reload = true, -- Auto-reload files when changed externally
         -- Your configuration, if any — see `lua/opencode/config.lua`
       }
