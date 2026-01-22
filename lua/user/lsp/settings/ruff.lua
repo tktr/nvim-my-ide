@@ -1,7 +1,7 @@
 return {
   settings = {
-      fixAll = true,
-      organizeImports = true,
-      logLevel = 'info'
-    },
+    fixAll = true,
+    organizeImports = true,
+    logLevel = "info",
+  },
 }

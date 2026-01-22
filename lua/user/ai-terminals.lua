@@ -11,7 +11,7 @@ end
 --     vim.keymap.set({"n", "v"}, "<leader>wda", function() require("ai-terminals").send_diagnostics("aichat") end, { desc = "Send diagnostics to Aichat" })
 -- end
 
-ai_terminals.setup({
+ai_terminals.setup {
   level = "info",
   backend = "tmux", -- Explicitly use tmux backend (auto-detected if in tmux)
   -- Optional tmux-specific configuration
@@ -20,7 +20,9 @@ ai_terminals.setup({
     height = 0.9, -- 90% of terminal height
     flags = {
       close_on_exit = true, -- Close popup when command exits
-      start_directory = function() return vim.fn.getcwd() end, -- Start in current working directory
+      start_directory = function()
+        return vim.fn.getcwd()
+      end, -- Start in current working directory
     },
     -- Uncomment to add global toggle key for all tmux popups
     -- toggle = {
@@ -28,25 +30,24 @@ ai_terminals.setup({
     --   mode = "force-close"
     -- },
   },
-  
+
   -- Your existing configuration...
   terminals = {
     aichat = {
-          cmd = function()
-            return string.format(
-              "aichat"
-              -- "AICHAT_LIGHT_THEME=%s aichat -r %%functions%% --session",
-              -- Convert boolean to string "true" or "false"
-              -- tostring(vim.o.background == "light")
-            )
-          end,
-          path_header_template = "@file %s --", -- Default: @ prefix
+      cmd = function()
+        return string.format(
+          "aichat"
+          -- "AICHAT_LIGHT_THEME=%s aichat -r %%functions%% --session",
+          -- Convert boolean to string "true" or "false"
+          -- tostring(vim.o.background == "light")
+        )
+      end,
+      path_header_template = "@file %s --", -- Default: @ prefix
     },
     -- ... other terminals
   },
-
-})
+}
 --       require("ai-terminals").setup(opts)
 --       -- Define your keymaps here or in a separate keymap file
--- 
+--
 --       -- Diff Tools

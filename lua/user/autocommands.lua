@@ -40,15 +40,15 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   pattern = { "*.py" },
   callback = function()
-      vim.lsp.buf.format({ async = false })
-      vim.lsp.buf.code_action({
-        apply = true,
-        context = {
-          only = { "source.organizeImports" },
-          diagnostics = {},
-        },
-      })
-  end
+    vim.lsp.buf.format { async = false }
+    vim.lsp.buf.code_action {
+      apply = true,
+      context = {
+        only = { "source.organizeImports" },
+        diagnostics = {},
+      },
+    }
+  end,
 })
 
 vim.api.nvim_create_autocmd({ "VimEnter" }, {

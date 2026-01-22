@@ -4,72 +4,140 @@ if not dap_status_ok then
 end
 
 local dap_ui_status_ok, dapui = pcall(require, "dapui")
-if not dap_ui_status_ok then
-  return
+
+local function first_exepath(candidates)
+  for _, candidate in ipairs(candidates) do
+    local resolved = vim.fn.exepath(candidate)
+    if resolved ~= nil and resolved ~= "" then
+      return resolved
+    end
+  end
 end
 
-local dap_install_status_ok, dap_install = pcall(require, "dap-install")
-if not dap_install_status_ok then
-  return
+local dap_python_status_ok, dap_python = pcall(require, "dap-python")
+-- Keep the rest of DAP working even if python bits are unavailable.
+
+local dap_virtual_text_ok, dap_virtual_text = pcall(require, "nvim-dap-virtual-text")
+if dap_virtual_text_ok then
+  dap_virtual_text.setup {
+    enabled = true,
+    enabled_commands = true,
+    highlight_changed_variables = true,
+    highlight_new_as_changed = true,
+    commented = false,
+    only_first_definition = true,
+    all_references = false,
+    clear_on_continue = false,
+  }
 end
 
-dap_install.setup {}
+local function project_root()
+  local markers = { "pyproject.toml", ".git" }
+  if vim.fs and vim.fs.root then
+    return vim.fs.root(0, markers) or vim.fn.getcwd()
+  end
 
-dap_install.config("python", {})
--- add other configs here
+  -- fallback for older Neovim
+  local buf = vim.api.nvim_buf_get_name(0)
+  local start = (buf ~= "" and vim.fn.fnamemodify(buf, ":p:h")) or vim.fn.getcwd()
+  local found = vim.fn.findfile("pyproject.toml", start .. ";")
+  if found ~= "" then
+    return vim.fn.fnamemodify(found, ":p:h")
+  end
+  local gitdir = vim.fn.finddir(".git", start .. ";")
+  if gitdir ~= "" then
+    return vim.fn.fnamemodify(gitdir, ":p:h")
+  end
+  return vim.fn.getcwd()
+end
 
-dapui.setup {
-  expand_lines = true,
-  icons = { expanded = "", collapsed = "", circular = "" },
-  mappings = {
-    -- Use a table to apply multiple mappings
-    expand = { "<CR>", "<2-LeftMouse>" },
-    open = "o",
-    remove = "d",
-    edit = "e",
-    repl = "r",
-    toggle = "t",
-  },
-  layouts = {
-    {
-      elements = {
-        { id = "scopes", size = 0.33 },
-        { id = "breakpoints", size = 0.17 },
-        { id = "stacks", size = 0.25 },
-        { id = "watches", size = 0.25 },
-      },
-      size = 0.33,
-      position = "right",
-    },
-    {
-      elements = {
-        { id = "repl", size = 0.45 },
-        { id = "console", size = 0.55 },
-      },
-      size = 0.27,
-      position = "bottom",
-    },
-  },
-  floating = {
-    max_height = 0.9,
-    max_width = 0.5, -- Floats will be treated as percentage of your screen.
-    border = vim.g.border_chars, -- Border style. Can be 'single', 'double' or 'rounded'
+if dap_python_status_ok then
+  -- Ensure the debuggee uses the uv-managed project venv.
+  -- This is separate from the adapter runtime.
+  dap_python.resolve_python = function()
+    local root = project_root()
+    local uv_python = root .. "/.venv/bin/python"
+    if vim.fn.executable(uv_python) == 1 then
+      return uv_python
+    end
+    return first_exepath { "python3", "python" } or "python3"
+  end
+
+  -- Run the adapter through uv so debugpy is provisioned via `uv run --with debugpy ...`.
+  -- Debuggee python is controlled via `dap_python.resolve_python` (above).
+  dap_python.setup("uv", {
+    pythonPath = function()
+      return dap_python.resolve_python()
+    end,
+  })
+end
+
+if dap_ui_status_ok then
+  dapui.setup {
+    expand_lines = true,
+    icons = { expanded = "", collapsed = "", circular = "" },
     mappings = {
-      close = { "q", "<Esc>" },
+      -- Use a table to apply multiple mappings
+      expand = { "<CR>", "<2-LeftMouse>" },
+      open = "o",
+      remove = "d",
+      edit = "e",
+      repl = "r",
+      toggle = "t",
     },
-  },
-}
+    layouts = {
+      {
+        elements = {
+          { id = "scopes", size = 0.33 },
+          { id = "breakpoints", size = 0.17 },
+          { id = "stacks", size = 0.25 },
+          { id = "watches", size = 0.25 },
+        },
+        size = 0.33,
+        position = "right",
+      },
+      {
+        elements = {
+          { id = "repl", size = 0.45 },
+          { id = "console", size = 0.55 },
+        },
+        size = 0.27,
+        position = "bottom",
+      },
+    },
+    floating = {
+      max_height = 0.9,
+      max_width = 0.5, -- Floats will be treated as percentage of your screen.
+      border = vim.g.border_chars, -- Border style. Can be 'single', 'double' or 'rounded'
+      mappings = {
+        close = { "q", "<Esc>" },
+      },
+    },
+  }
+end
 
 vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
 
-dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open()
+dap.listeners.before.attach.dapui_config = function()
+  if dap_ui_status_ok then
+    dapui.open()
+  end
 end
 
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
+dap.listeners.before.launch.dapui_config = function()
+  if dap_ui_status_ok then
+    dapui.open()
+  end
 end
 
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
+dap.listeners.before.event_terminated.dapui_config = function()
+  if dap_ui_status_ok then
+    dapui.close()
+  end
+end
+
+dap.listeners.before.event_exited.dapui_config = function()
+  if dap_ui_status_ok then
+    dapui.close()
+  end
 end

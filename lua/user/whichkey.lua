@@ -1,6 +1,6 @@
 local status_ok, which_key = pcall(require, "which-key")
 if not status_ok then
-  vim.notify("Unable to load 'which-key' plugin")
+  vim.notify "Unable to load 'which-key' plugin"
   return
 end
 
@@ -102,7 +102,7 @@ local mappings = {
     g = "Git Files",
     p = "Projects",
     t = "Live Grep",
-    b = "Buffers"
+    b = "Buffers",
   },
   g = {
     name = "Git",
@@ -163,6 +163,25 @@ local mappings = {
     v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
   },
 
+  d = {
+    name = "Debug",
+    b = "Breakpoint (toggle)",
+    c = "Continue/Start",
+    i = "Step Into",
+    o = "Step Over",
+    O = "Step Out",
+    r = "REPL Toggle",
+    l = "Run Last",
+    u = "UI Toggle",
+    t = "Terminate",
+    T = {
+      name = "Tests",
+      m = "Debug test method",
+      c = "Debug test class",
+      f = "Debug test file",
+    },
+  },
+
   o = {
     name = "opencode",
     t = "Toggle",
@@ -171,14 +190,14 @@ local mappings = {
     n = "New session",
     y = "Copy last response",
     s = "Select prompt",
-    e = "Explain this code"
+    e = "Explain this code",
     --  vim.keymap.set("n", "<S-C-u>", function()
     --    require("opencode").command "messages_half_page_up"
     --  end, { desc = "Messages half page up" })
     --  vim.keymap.set("n", "<S-C-d>", function()
     --    require("opencode").command "messages_half_page_down"
     --  end, { desc = "Messages half page down" })
-  }
+  },
 }
 
 which_key.setup(setup)

@@ -31,7 +31,7 @@ return {
       -- Old: show_current_context = true
       -- New: `show_current_context` is part of `scope`.
       show_start = true, -- Shows the starting line of the current scope
-      show_end = true,   -- Shows the ending line of the current scope (optional, often less useful)
+      show_end = true, -- Shows the ending line of the current scope (optional, often less useful)
       -- highlight = "IndentBlanklineContext", -- You might want to define a highlight group for the context
       -- context_patterns = { "class", "function", "for", "if", "while", "do", "begin", "end" },
       -- If you had `context_patterns` in your old config, you'd add them here.
@@ -51,7 +51,7 @@ return {
         "TelescopePrompt", -- For Telescope's prompt
         "lspinfo", -- LSP info buffers
         "toggleterm", -- Toggleterm terminal buffers
-        "DapUi_*" -- DAP UI buffers if you use nvim-dap-ui
+        "DapUi_*", -- DAP UI buffers if you use nvim-dap-ui
       },
     },
 
