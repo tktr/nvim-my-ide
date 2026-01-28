@@ -44,6 +44,19 @@ local kind_icons = {
 }
 
 cmp.setup {
+  enabled = function()
+    -- DAP REPL is a prompt-style buffer; completion providers (especially LSP-based
+    -- ones like Copilot) can trigger Neovim LSP changetracking crashes there.
+    if vim.bo.buftype == "prompt" then
+      return false
+    end
+
+    if vim.bo.filetype == "dap-repl" then
+      return false
+    end
+
+    return true
+  end,
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body) -- For `luasnip` users.

@@ -199,6 +199,17 @@ return require("lazy").setup {
         require("copilot").setup {
           suggestion = { enabled = false },
           panel = { enabled = false },
+          -- Prevent Copilot from attaching to special prompt buffers
+          -- (e.g. DAP REPL) which can trigger Neovim LSP changetracking errors.
+          filetypes = {
+            ["dap-repl"] = false,
+            ["dapui_console"] = false,
+            ["dapui_watches"] = false,
+            ["dapui_stacks"] = false,
+            ["dapui_scopes"] = false,
+            ["dapui_breakpoints"] = false,
+            ["TelescopePrompt"] = false,
+          },
         }
       end,
     },

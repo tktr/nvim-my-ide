@@ -81,9 +81,54 @@ keymap("n", "<leader>di", "<cmd>lua require'dap'.step_into()<cr>", opts)
 keymap("n", "<leader>do", "<cmd>lua require'dap'.step_over()<cr>", opts)
 keymap("n", "<leader>dO", "<cmd>lua require'dap'.step_out()<cr>", opts)
 keymap("n", "<leader>dr", "<cmd>lua require'dap'.repl.toggle()<cr>", opts)
+
+keymap("n", "<leader>dR", function()
+  local ok, dap = pcall(require, "dap")
+  if not ok then
+    return
+  end
+
+  dap.repl.open({ height = 12 }, "vsplit")
+end, opts)
+
+keymap("n", "<leader>dF", function()
+  local ok, dapui = pcall(require, "dapui")
+  if ok and dapui and dapui.float_element then
+    dapui.float_element("repl", {
+      enter = true,
+      width = 120,
+      height = 25,
+      position = "center",
+    })
+    return
+  end
+
+  local dap_ok, dap = pcall(require, "dap")
+  if not dap_ok then
+    return
+  end
+
+  dap.repl.open({ height = 12 }, "belowright split")
+end, opts)
 keymap("n", "<leader>dl", "<cmd>lua require'dap'.run_last()<cr>", opts)
 keymap("n", "<leader>du", "<cmd>lua require'dapui'.toggle()<cr>", opts)
 keymap("n", "<leader>dt", "<cmd>lua require'dap'.terminate()<cr>", opts)
+
+keymap("n", "<leader>dP", function()
+  local ok, dap = pcall(require, "dap")
+  if not ok then
+    return
+  end
+
+  local configs = dap.configurations and dap.configurations.python or nil
+  if not configs or not configs[1] then
+    return
+  end
+
+  -- Runs the highest-priority python config, which we insert as:
+  -- "Pytest: current file" (see lua/user/dap.lua)
+  dap.run(configs[1])
+end, opts)
 
 keymap("n", "<leader>dTm", function()
   local status_ok, dap_python = pcall(require, "dap-python")

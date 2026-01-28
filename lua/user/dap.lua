@@ -24,7 +24,7 @@ if dap_virtual_text_ok then
     enabled_commands = true,
     highlight_changed_variables = true,
     highlight_new_as_changed = true,
-    commented = false,
+    commented = true,
     only_first_definition = true,
     all_references = false,
     clear_on_continue = false,
@@ -52,6 +52,9 @@ local function project_root()
 end
 
 if dap_python_status_ok then
+  -- Use pytest for dap-python test helpers.
+  dap_python.test_runner = "pytest"
+
   -- Ensure the debuggee uses the uv-managed project venv.
   -- This is separate from the adapter runtime.
   dap_python.resolve_python = function()
@@ -66,6 +69,22 @@ if dap_python_status_ok then
   -- Run the adapter through uv so debugpy is provisioned via `uv run --with debugpy ...`.
   -- Debuggee python is controlled via `dap_python.resolve_python` (above).
   dap_python.setup("uv", {
+    pythonPath = function()
+      return dap_python.resolve_python()
+    end,
+  })
+
+  -- Run pytest under the debugger (matches `uv run pytest`).
+  -- This avoids relative-import issues that happen when tests are launched
+  -- as standalone scripts (`program = "${file}"`).
+  dap.configurations.python = dap.configurations.python or {}
+  table.insert(dap.configurations.python, 1, {
+    type = "python",
+    request = "launch",
+    name = "Pytest: current file",
+    module = "pytest",
+    args = { "${file}" },
+    cwd = project_root(),
     pythonPath = function()
       return dap_python.resolve_python()
     end,
