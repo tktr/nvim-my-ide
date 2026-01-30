@@ -169,3 +169,26 @@ keymap("i", "<C-x>", 'copilot#Accept("\\<CR>")', {
   replace_keycodes = false,
 })
 vim.g.copilot_no_tab_map = true
+
+-- Pyright
+keymap("n", "<leader>lD", function()
+  local clients = vim.lsp.get_clients { name = "pyright" }
+  if not clients or #clients == 0 then
+    return
+  end
+
+  local client = clients[1]
+  local settings = client.config.settings or {}
+  settings.python = settings.python or {}
+  settings.python.analysis = settings.python.analysis or {}
+
+  local current = settings.python.analysis.diagnosticMode or "openFilesOnly"
+  local next_mode = (current == "workspace") and "openFilesOnly" or "workspace"
+  settings.python.analysis.diagnosticMode = next_mode
+
+  -- Persist back onto the client config and notify.
+  client.config.settings = settings
+  client.notify("workspace/didChangeConfiguration", { settings = settings })
+
+  vim.notify("Pyright diagnosticMode: " .. next_mode, vim.log.levels.INFO)
+end, opts)

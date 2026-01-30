@@ -130,6 +130,7 @@ local mappings = {
   l = {
     name = "LSP",
     a = "Code Action",
+    D = "Toggle Pyright diagnostics",
     i = "Info",
     I = "Mason Info",
     j = "Diagnostic go to next",
