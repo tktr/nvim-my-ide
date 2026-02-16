@@ -48,6 +48,11 @@ return require("lazy").setup {
   { "akinsho/bufferline.nvim" },
   { "moll/vim-bbye" },
   {
+    "https://codeberg.org/ggandor/leap.nvim",
+    name = "leap.nvim",
+    pin = true,
+  },
+  {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
   }, -- Lualine can be lazy loaded
@@ -107,6 +112,13 @@ return require("lazy").setup {
 
   -- Telescope
   { "nvim-telescope/telescope.nvim", cmd = "Telescope" },
+  {
+    "dmtrKovalenko/fff.nvim",
+    build = function()
+      require("fff.download").download_or_build_binary()
+    end,
+    lazy = false,
+  },
 
   -- Treesitter
   {

@@ -103,6 +103,8 @@ local mappings = {
     p = "Projects",
     t = "Live Grep",
     b = "Buffers",
+    z = "FFF Files",
+    Z = "FFF in Git Root",
   },
   g = {
     name = "Git",
@@ -125,6 +127,11 @@ local mappings = {
       "<cmd>Gitsigns diffthis HEAD<cr>",
       "Diff",
     },
+  },
+  j = {
+    name = "Jump",
+    j = "Leap (current window)",
+    w = "Leap (all windows)",
   },
 
   l = {

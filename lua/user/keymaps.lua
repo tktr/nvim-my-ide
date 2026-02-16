@@ -66,6 +66,40 @@ keymap("n", "<leader>fg", ":Telescope git_files<CR>", opts)
 keymap("n", "<leader>ft", ":Telescope live_grep<CR>", opts)
 keymap("n", "<leader>fp", ":Telescope projects<CR>", opts)
 keymap("n", "<leader>fb", ":Telescope buffers<CR>", opts)
+keymap("n", "<leader>fz", function()
+  local ok, fff = pcall(require, "fff")
+  if not ok then
+    return
+  end
+
+  fff.find_files()
+end, opts)
+keymap("n", "<leader>fZ", function()
+  local ok, fff = pcall(require, "fff")
+  if not ok then
+    return
+  end
+
+  fff.find_in_git_root()
+end, opts)
+
+-- Leap
+keymap({ "n", "x", "o" }, "<leader>jj", function()
+  local ok, leap = pcall(require, "leap")
+  if not ok then
+    return
+  end
+
+  leap.leap { target_windows = { vim.fn.win_getid() } }
+end, opts)
+keymap({ "n", "x", "o" }, "<leader>jw", function()
+  local ok, leap = pcall(require, "leap")
+  if not ok then
+    return
+  end
+
+  leap.leap()
+end, opts)
 
 -- Git
 keymap("n", "<leader>gg", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", opts)
