@@ -1,15 +1,15 @@
 # Workflow Status: neovim-config-change
 
-CurrentPhase: implementation
-ImplementationCompleted: false
+CurrentPhase: done
+ImplementationCompleted: true
 
 ## Checklist
 - [x] Planning complete
-- [ ] Implementation complete
-- [ ] Review complete
-- [ ] Compound complete
-- [ ] Close complete
+- [x] Implementation complete
+- [x] Review complete
+- [x] Compound complete
+- [x] Close complete
 
-Next action: Implement code/doc changes for neovim-config-change
+Next action: Workflow complete
 
-Deferred follow-up: `todos/2026-02-17-neovim-config-change.md` (unpin `leap.nvim` later)
+Deferred follow-up: `todos/2026-02-17-neovim-config-change.md`

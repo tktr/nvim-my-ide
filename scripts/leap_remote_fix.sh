@@ -8,7 +8,7 @@ set -euo pipefail
 
 NVIM_DATA_DIR="${1:-${XDG_DATA_HOME:-$HOME/.local/share}/nvim}"
 LEAP_DIR="$NVIM_DATA_DIR/lazy/leap.nvim"
-TARGET_URL="https://codeberg.org/ggandor/leap.nvim"
+TARGET_URL="https://codeberg.org/andyg/leap.nvim"
 
 if [[ ! -d "$LEAP_DIR/.git" ]]; then
   echo "leap.nvim checkout not found at: $LEAP_DIR"
