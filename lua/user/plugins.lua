@@ -48,7 +48,7 @@ return require("lazy").setup {
   { "akinsho/bufferline.nvim" },
   { "moll/vim-bbye" },
   {
-    "https://codeberg.org/andyg/leap.nvim",
+    url = "https://codeberg.org/andyg/leap.nvim",
     name = "leap.nvim",
   },
   {
