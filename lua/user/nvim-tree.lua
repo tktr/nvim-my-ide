@@ -53,6 +53,9 @@ nvim_tree.setup {
       error = "",
     },
   },
+  git = {
+    enable = false,
+  },
   view = {
     width = 30,
     side = "left",
