@@ -61,12 +61,7 @@ keymap("v", ">", ">gv", opts)
 keymap("n", "<leader>e", ":NvimTreeToggle<CR>", opts)
 
 -- Telescope
-keymap("n", "<leader>ff", ":Telescope find_files<CR>", opts)
-keymap("n", "<leader>fg", ":Telescope git_files<CR>", opts)
-keymap("n", "<leader>ft", ":Telescope live_grep<CR>", opts)
-keymap("n", "<leader>fp", ":Telescope projects<CR>", opts)
-keymap("n", "<leader>fb", ":Telescope buffers<CR>", opts)
-keymap("n", "<leader>fz", function()
+keymap("n", "<leader>ff", function()
   local ok, fff = pcall(require, "fff")
   if not ok then
     return
@@ -74,7 +69,7 @@ keymap("n", "<leader>fz", function()
 
   fff.find_files()
 end, opts)
-keymap("n", "<leader>fZ", function()
+keymap("n", "<leader>fg", function()
   local ok, fff = pcall(require, "fff")
   if not ok then
     return
@@ -82,6 +77,16 @@ keymap("n", "<leader>fZ", function()
 
   fff.find_in_git_root()
 end, opts)
+keymap("n", "<leader>ft", function()
+  local ok, fff = pcall(require, "fff")
+  if not ok then
+    return
+  end
+
+  fff.live_grep()
+end, opts)
+keymap("n", "<leader>fp", ":Telescope projects<CR>", opts)
+keymap("n", "<leader>fb", ":Telescope buffers<CR>", opts)
 
 -- Leap
 keymap({ "n", "x", "o" }, "<leader>jj", function()
