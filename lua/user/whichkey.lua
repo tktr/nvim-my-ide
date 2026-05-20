@@ -88,23 +88,26 @@ local mappings = {
   ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
   ["Y"] = "Yank Clipboard",
 
+  ["/"] = "Toggle Comment",
+  ["."] = "Jump to Next Space",
+  [","] = "Jump to Previous Space",
   p = {
-    name = "Packer",
-    c = { "<cmd>PackerCompile<cr>", "Compile" },
-    i = { "<cmd>PackerInstall<cr>", "Install" },
-    s = { "<cmd>PackerSync<cr>", "Sync" },
-    S = { "<cmd>PackerStatus<cr>", "Status" },
-    u = { "<cmd>PackerUpdate<cr>", "Update" },
+    name = "Plugins",
+    c = { "<cmd>Lazy check<cr>", "Check Updates" },
+    h = { "<cmd>Lazy health<cr>", "Health" },
+    l = { "<cmd>Lazy<cr>", "Lazy" },
+    p = { "<cmd>Lazy profile<cr>", "Profile" },
+    r = { "<cmd>Lazy restore<cr>", "Restore Lockfile" },
+    s = { "<cmd>Lazy sync<cr>", "Sync" },
+    u = { "<cmd>Lazy update<cr>", "Update" },
   },
   f = {
     name = "Find",
     f = "Files",
-    g = "Git Files",
+    g = "Files in Git Root",
     p = "Projects",
     t = "Live Grep",
     b = "Buffers",
-    z = "FFF Files",
-    Z = "FFF in Git Root",
   },
   g = {
     name = "Git",
@@ -191,6 +194,30 @@ local mappings = {
       c = "Debug test class",
       f = "Debug test file",
     },
+    v = {
+      name = "AI Diff",
+      o = "Show diff (vimdiff)",
+      D = "Show diff (delta)",
+      r = "Revert changes from backup",
+    },
+  },
+
+  a = {
+    name = "AI",
+    f = "Add current file to AI Chat",
+    F = "Add all buffers to AI Chat",
+    t = {
+      name = "Terminals",
+      i = "Toggle AI Chat terminal",
+    },
+    d = {
+      name = "Diagnostics",
+      i = "Send diagnostics to AI Chat",
+    },
+    r = "Run command and send output",
+    j = "Send Jira ticket example",
+    w = "Focus last AI terminal window",
+    x = "Destroy all AI terminals",
   },
 
   o = {
@@ -211,5 +238,39 @@ local mappings = {
   },
 }
 
-which_key.setup(setup)
-which_key.register(mappings, opts)
+local v3_mappings = {
+  { "<leader>/", desc = "Toggle Comment" },
+  { "<leader>,", desc = "Jump to Previous Space" },
+  { "<leader>.", desc = "Jump to Next Space" },
+  { "<leader>Y", desc = "Yank Clipboard" },
+  { "<leader>a", group = "AI" },
+  { "<leader>ad", group = "Diagnostics" },
+  { "<leader>adi", desc = "Send diagnostics to AI Chat" },
+  { "<leader>af", desc = "Add current file to AI Chat" },
+  { "<leader>aF", desc = "Add all buffers to AI Chat" },
+  { "<leader>aj", desc = "Send Jira ticket example" },
+  { "<leader>ar", desc = "Run command and send output" },
+  { "<leader>at", group = "Terminals" },
+  { "<leader>ati", desc = "Toggle AI Chat terminal" },
+  { "<leader>aw", desc = "Focus last AI terminal window" },
+  { "<leader>ax", desc = "Destroy all AI terminals" },
+  { "<leader>d", group = "Debug" },
+  { "<leader>dT", group = "Tests" },
+  { "<leader>dv", group = "AI Diff" },
+  { "<leader>f", group = "Find" },
+  { "<leader>g", group = "Git" },
+  { "<leader>j", group = "Jump" },
+  { "<leader>l", group = "LSP" },
+  { "<leader>o", group = "opencode" },
+  { "<leader>p", group = "Plugins" },
+  { "<leader>s", group = "Search" },
+  { "<leader>t", group = "Terminal" },
+}
+
+if which_key.add then
+  which_key.setup {}
+  which_key.add(v3_mappings)
+else
+  which_key.setup(setup)
+  which_key.register(mappings, opts)
+end

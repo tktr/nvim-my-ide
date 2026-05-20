@@ -3,6 +3,10 @@ local keymap = vim.keymap.set
 -- Silent keymap option
 local opts = { silent = true }
 
+local function desc_opts(desc)
+  return vim.tbl_extend("force", opts, { desc = desc })
+end
+
 --Remap space as leader key
 keymap("", "<Space>", "<Nop>", opts)
 vim.g.mapleader = " "
@@ -24,8 +28,8 @@ keymap("n", "<C-l>", "<C-w>l", opts)
 keymap("n", "<C-d>", "<C-d>zz", opts)
 keymap("n", "<C-u>", "<C-u>zz", opts)
 -- Jump to whitespace
-keymap("n", "<leader>.", "f ", opts)
-keymap("n", "<leader>,", "F ", opts)
+keymap("n", "<leader>.", "f ", desc_opts "Jump to next space")
+keymap("n", "<leader>,", "F ", desc_opts "Jump to previous space")
 
 -- Resize with arrows
 keymap("n", "<C-Up>", ":resize -2<CR>", opts)
@@ -38,7 +42,7 @@ keymap("n", "<S-l>", ":bnext<CR>", opts)
 keymap("n", "<S-h>", ":bprevious<CR>", opts)
 
 -- Clear highlights
-keymap("n", "<leader>h", "<cmd>nohlsearch<CR>", opts)
+keymap("n", "<leader>h", "<cmd>nohlsearch<CR>", desc_opts "Clear search highlights")
 
 -- Close buffers
 keymap("n", "<S-q>", "<cmd>Bdelete!<CR>", opts)
@@ -58,7 +62,7 @@ keymap("v", ">", ">gv", opts)
 -- Plugins --
 
 -- NvimTree
-keymap("n", "<leader>e", ":NvimTreeToggle<CR>", opts)
+keymap("n", "<leader>e", ":NvimTreeToggle<CR>", desc_opts "Toggle file explorer")
 
 -- Telescope
 keymap("n", "<leader>ff", function()
@@ -68,7 +72,7 @@ keymap("n", "<leader>ff", function()
   end
 
   fff.find_files()
-end, opts)
+end, desc_opts "Find files")
 keymap("n", "<leader>fg", function()
   local ok, fff = pcall(require, "fff")
   if not ok then
@@ -76,7 +80,7 @@ keymap("n", "<leader>fg", function()
   end
 
   fff.find_in_git_root()
-end, opts)
+end, desc_opts "Find files in git root")
 keymap("n", "<leader>ft", function()
   local ok, fff = pcall(require, "fff")
   if not ok then
@@ -84,9 +88,9 @@ keymap("n", "<leader>ft", function()
   end
 
   fff.live_grep()
-end, opts)
-keymap("n", "<leader>fp", ":Telescope projects<CR>", opts)
-keymap("n", "<leader>fb", ":Telescope buffers<CR>", opts)
+end, desc_opts "Live grep")
+keymap("n", "<leader>fp", ":Telescope projects<CR>", desc_opts "Find projects")
+keymap("n", "<leader>fb", ":Telescope buffers<CR>", desc_opts "Find buffers")
 
 -- Leap
 keymap({ "n", "x", "o" }, "<leader>jj", function()
@@ -96,7 +100,7 @@ keymap({ "n", "x", "o" }, "<leader>jj", function()
   end
 
   leap.leap { target_windows = { vim.fn.win_getid() } }
-end, opts)
+end, desc_opts "Leap in current window")
 keymap({ "n", "x", "o" }, "<leader>jw", function()
   local ok, leap = pcall(require, "leap")
   if not ok then
@@ -104,14 +108,19 @@ keymap({ "n", "x", "o" }, "<leader>jw", function()
   end
 
   leap.leap()
-end, opts)
+end, desc_opts "Leap in all windows")
 
 -- Git
-keymap("n", "<leader>gg", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", opts)
+keymap("n", "<leader>gg", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", desc_opts "Toggle Lazygit")
 
 -- Comment
-keymap("n", "<leader>/", "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>", opts)
-keymap("x", "<leader>/", "<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", opts)
+keymap("n", "<leader>/", "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>", desc_opts "Toggle comment")
+keymap(
+  "x",
+  "<leader>/",
+  "<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
+  desc_opts "Toggle comment"
+)
 
 -- DAP
 keymap("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", opts)
@@ -198,9 +207,9 @@ end, opts)
 
 -- Clipboard
 -- '+' register will copy to system clipboard using OSC52 - natively supported since neovim 10.0
-keymap("n", "<leader>Y", '"+y', opts)
-keymap("n", "<leader>YY", '"+yy', opts)
-keymap("v", "<leader>Y", '"+y', opts)
+keymap("n", "<leader>Y", '"+y', desc_opts "Yank to clipboard")
+keymap("n", "<leader>YY", '"+yy', desc_opts "Yank line to clipboard")
+keymap("v", "<leader>Y", '"+y', desc_opts "Yank selection to clipboard")
 
 -- Copilot
 keymap("i", "<C-x>", 'copilot#Accept("\\<CR>")', {

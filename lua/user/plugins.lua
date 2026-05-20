@@ -1,6 +1,9 @@
 -- Bootstrap lazy.nvim
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
   local out = vim.fn.system { "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath }
   if vim.v.shell_error ~= 0 then
@@ -22,12 +25,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- Main Lazy.nvim setup call
-return require("lazy").setup {
-  {
-    "vhyrro/luarocks.nvim",
-    priority = 1000, -- Very high priority is required, luarocks.nvim should run as the first plugin in your config.
-    config = true,
-  },
+return require("lazy").setup({
   -- Useful lua functions used by lots of plugins (often needed early)
   { "nvim-lua/plenary.nvim", lazy = false },
 
@@ -70,7 +68,7 @@ return require("lazy").setup {
     event = "BufReadPost",
   },
   { "goolord/alpha-nvim", event = "VimEnter" }, -- Loads on Neovim startup
-  { "folke/which-key.nvim", tag = "v2.1.0", event = "VeryLazy" }, -- Often configured to load on specific key presses
+  { "folke/which-key.nvim", event = "VeryLazy" }, -- Often configured to load on specific key presses
 
   -- Colorschemes
   { "folke/tokyonight.nvim" },
@@ -179,6 +177,7 @@ return require("lazy").setup {
   { "tktr/nvim-ansible", ft = { "yaml", "ansible" } }, -- Load only for Ansible-related files
   {
     "folke/snacks.nvim",
+    priority = 1000,
 
     ---@type snacks.Config
     opts = {
@@ -187,11 +186,27 @@ return require("lazy").setup {
         border = "rounded", -- Border style for the input window
       },
       picker = {
+        ui_select = true,
         -- your picker configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
       },
+      notifier = { enabled = true },
+      image = { enabled = false },
     },
+    config = function(_, opts)
+      local snacks = require "snacks"
+      snacks.setup(opts)
+
+      -- Headless health checks may run before UIEnter, so install the UI
+      -- adapters eagerly when the corresponding snacks are enabled.
+      if opts.input and opts.input.enabled then
+        snacks.input.enable()
+      end
+      if opts.picker and opts.picker.enabled and opts.picker.ui_select ~= false then
+        snacks.picker.setup()
+      end
+    end,
   },
 
   -- AI
@@ -292,7 +307,7 @@ return require("lazy").setup {
           -- Add current file to Claude using generic function
           require("ai-terminals").add_files_to_terminal("aichat", { vim.fn.expand "%" })
         end,
-        desc = "Add current file to Claude",
+        desc = "Add current file to AI Chat",
       },
       {
         "<leader>aF", -- Mnemonic: Add Files (all buffers)
@@ -300,7 +315,7 @@ return require("lazy").setup {
           -- Add all buffers to Claude using generic function
           require("ai-terminals").add_buffers_to_terminal "aichat"
         end,
-        desc = "Add all buffers to Claude",
+        desc = "Add all buffers to AI Chat",
       },
       -- aichat Keymaps
       {
@@ -347,7 +362,7 @@ return require("lazy").setup {
       },
       -- Focus Terminal
       {
-        "<leader>af", -- Mnemonic: AI Focus
+        "<leader>aw", -- Mnemonic: AI Window focus
         function()
           require("ai-terminals").focus()
         end,
@@ -405,7 +420,11 @@ return require("lazy").setup {
       end, { desc = "Explain this code" })
     end,
   },
-}
+}, {
+  rocks = {
+    enabled = false,
+  },
+})
 
 -- You no longer need the PACKER_BOOTSTRAP check.
 -- Lazy.nvim handles its own syncing automatically on first run.
