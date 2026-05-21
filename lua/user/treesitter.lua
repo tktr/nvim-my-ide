@@ -16,7 +16,7 @@ end
 configs.setup {
   -- make sure  "c", "vim", "lua", "help" are excluded from section below
   -- see  https://github.com/nvim-treesitter/nvim-treesitter/issues/3970
-  ensure_installed = { "markdown", "markdown_inline", "bash", "python" }, -- put the language you want in this array
+  ensure_installed = { "markdown", "markdown_inline", "bash", "python", "regex" }, -- put the language you want in this array
   -- ensure_installed = "all", -- one of "all" or a list of languages
   ignore_install = { "" }, -- List of parsers to ignore installing
   sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)

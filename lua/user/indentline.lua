@@ -47,7 +47,7 @@ return {
         "packer",
         "NvimTree",
         "Lazy", -- Add Lazy.nvim's buffer if you want to exclude it
-        "alpha", -- If you're using alpha-nvim dashboard
+        "snacks_dashboard",
         "TelescopePrompt", -- For Telescope's prompt
         "lspinfo", -- LSP info buffers
         "toggleterm", -- Toggleterm terminal buffers

@@ -1,4 +1,5 @@
 vim.opt.backup = false -- creates a backup file
+vim.g.clipboard = "osc52" -- use Neovim's OSC52 clipboard provider in remote/headless-friendly environments
 vim.opt.relativenumber = true -- relative line numbers
 vim.opt.cmdheight = 1 -- more space in the neovim command line for displaying messages
 vim.opt.completeopt = { "menuone", "noselect" } -- mostly just for cmp

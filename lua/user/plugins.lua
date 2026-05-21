@@ -35,6 +35,7 @@ return require("lazy").setup({
 
   -- Icons
   { "kyazdani42/nvim-web-devicons", lazy = false }, -- Often needed early for UI elements
+  { "echasnovski/mini.icons", version = false },
 
   -- File Explorer
   {
@@ -67,7 +68,6 @@ return require("lazy").setup({
     opts = {},
     event = "BufReadPost",
   },
-  { "goolord/alpha-nvim", event = "VimEnter" }, -- Loads on Neovim startup
   { "folke/which-key.nvim", event = "VeryLazy" }, -- Often configured to load on specific key presses
 
   -- Colorschemes
@@ -85,7 +85,7 @@ return require("lazy").setup({
       { "hrsh7th/cmp-nvim-lsp" },
       { "hrsh7th/cmp-nvim-lua" },
       -- Snippet engine for cmp
-      { "L3MON4D3/LuaSnip" },
+      { "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
       { "rafamadriz/friendly-snippets" },
     },
     -- Example of lazy loading cmp on Insert mode
@@ -185,14 +185,93 @@ return require("lazy").setup({
         enabled = true, -- Enable the input UI
         border = "rounded", -- Border style for the input window
       },
+      bigfile = { enabled = true },
+      dashboard = {
+        enabled = true,
+        preset = {
+          header = [[
+                               __                
+  ___     ___    ___   __  __ /\_\    ___ ___    
+ / _ `\  / __`\ / __`\/\ \/\ \\/\ \  / __` __`\  
+/\ \/\ \/\  __//\ \_\ \ \ \_/ |\ \ \/\ \/\ \/\ \ 
+\ \_\ \_\ \____\ \____/\ \___/  \ \_\ \_\ \_\ \_\
+ \/_/\/_/\/____/\/___/  \/__/    \/_/\/_/\/_/\/_/]],
+          keys = {
+            { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+            { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+            { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+            {
+              icon = " ",
+              key = "p",
+              desc = "Projects",
+              action = function()
+                require("telescope").extensions.projects.projects()
+              end,
+            },
+            {
+              icon = " ",
+              key = "c",
+              desc = "Config",
+              action = ":lua Snacks.dashboard.pick('files', { cwd = vim.fn.stdpath('config') })",
+            },
+            { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+            { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+          },
+        },
+        sections = {
+          { section = "header" },
+          { section = "keys", gap = 1, padding = 1 },
+          { icon = " ", title = "Recent Files", section = "recent_files", limit = 8, indent = 2, padding = 1 },
+          {
+            icon = " ",
+            title = "Projects",
+            section = "projects",
+            pane = 2,
+            dirs = function()
+              return vim.tbl_filter(function(path)
+                return vim.fn.isdirectory(path) == 1
+              end, vim.fn.glob(vim.fn.expand "~/workspace" .. "/*", false, true))
+            end,
+            limit = 8,
+            indent = 2,
+            padding = 1,
+          },
+          {
+            icon = " ",
+            title = "Git Status",
+            section = "terminal",
+            pane = 2,
+            enabled = function()
+              return Snacks.git.get_root() ~= nil
+            end,
+            cmd = "git status --short --branch --renames",
+            height = 5,
+            padding = 1,
+            ttl = 5 * 60,
+            indent = 3,
+          },
+          { section = "startup" },
+        },
+      },
+      explorer = { enabled = true },
       picker = {
+        enabled = true,
         ui_select = true,
+        db = {
+          sqlite3_path = "/lib/x86_64-linux-gnu/libsqlite3.so",
+        },
         -- your picker configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
       },
       notifier = { enabled = true },
       image = { enabled = false },
+      quickfile = { enabled = true },
+      scope = { enabled = true },
+      scroll = { enabled = true },
+      statuscolumn = { enabled = true },
+      words = { enabled = true },
     },
     config = function(_, opts)
       local snacks = require "snacks"
@@ -202,6 +281,9 @@ return require("lazy").setup({
       -- adapters eagerly when the corresponding snacks are enabled.
       if opts.input and opts.input.enabled then
         snacks.input.enable()
+      end
+      if opts.dashboard and opts.dashboard.enabled then
+        snacks.dashboard.setup()
       end
       if opts.picker and opts.picker.enabled and opts.picker.ui_select ~= false then
         snacks.picker.setup()
