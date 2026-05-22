@@ -223,6 +223,7 @@ return require("lazy").setup({
           { section = "header" },
           { section = "keys", gap = 1, padding = 1 },
           { icon = " ", title = "Recent Files", section = "recent_files", limit = 8, indent = 2, padding = 1 },
+          { pane = 2, text = "\n\n\n\n\n\n\n" },
           {
             icon = " ",
             title = "Projects",
